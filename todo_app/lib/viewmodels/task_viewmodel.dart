@@ -9,15 +9,14 @@ class TaskViewModel extends ChangeNotifier {
 
   List<Task> get tasks => _tasks;
 
-  /// Load tasks from local storage
   Future<void> loadTasks() async {
     final loadedTasks = await _storage.loadTasks();
-    _tasks.clear();
-    _tasks.addAll(loadedTasks);
+    _tasks
+      ..clear()
+      ..addAll(loadedTasks);
     notifyListeners();
   }
 
-  /// Add new task (simple version)
   Future<void> addTask(String title) async {
     final newTask = Task(
       id: const Uuid().v4(),
@@ -26,13 +25,11 @@ class TaskViewModel extends ChangeNotifier {
       isDone: false,
     );
 
-
     _tasks.add(newTask);
     await _storage.saveTasks(_tasks);
     notifyListeners();
   }
 
-  /// Toggle task done / not done
   Future<void> toggleTask(String id) async {
     final index = _tasks.indexWhere((task) => task.id == id);
     if (index != -1) {
@@ -42,10 +39,19 @@ class TaskViewModel extends ChangeNotifier {
     }
   }
 
-  /// Delete task (for later)
   Future<void> deleteTask(String id) async {
     _tasks.removeWhere((task) => task.id == id);
     await _storage.saveTasks(_tasks);
     notifyListeners();
+  }
+
+  /// ✅ EDIT TASK
+  Future<void> updateTask(String id, String newTitle) async {
+    final index = _tasks.indexWhere((task) => task.id == id);
+    if (index != -1) {
+      _tasks[index].title = newTitle;
+      await _storage.saveTasks(_tasks);
+      notifyListeners();
+    }
   }
 }

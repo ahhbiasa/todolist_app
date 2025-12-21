@@ -36,12 +36,41 @@ class TaskListView extends StatelessWidget {
                     vm.deleteTask(task.id);
                   },
                   child: ListTile(
+                    onLongPress: () {
+                      final controller = TextEditingController(text: task.title);
+
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text('Edit Task'),
+                          content: TextField(
+                            controller: controller,
+                            autofocus: true,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancel'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                final newText = controller.text.trim();
+                                if (newText.isNotEmpty) {
+                                  vm.updateTask(task.id, newText);
+                                }
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Save'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                     title: Text(
                       task.title,
                       style: TextStyle(
-                        decoration: task.isDone
-                            ? TextDecoration.lineThrough
-                            : null,
+                        decoration:
+                            task.isDone ? TextDecoration.lineThrough : null,
                       ),
                     ),
                     trailing: Checkbox(
