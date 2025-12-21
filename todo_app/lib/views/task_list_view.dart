@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../viewmodels/task_viewmodel.dart';
 
 class TaskListView extends StatelessWidget {
@@ -12,65 +13,53 @@ class TaskListView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My To-Do List'),
+        actions: [
+          PopupMenuButton<TaskFilter>(
+            onSelected: vm.setFilter,
+            itemBuilder: (_) => const [
+              PopupMenuItem(
+                value: TaskFilter.all,
+                child: Text('All'),
+              ),
+              PopupMenuItem(
+                value: TaskFilter.completed,
+                child: Text('Completed'),
+              ),
+              PopupMenuItem(
+                value: TaskFilter.incomplete,
+                child: Text('Incomplete'),
+              ),
+            ],
+          ),
+        ],
       ),
-      body: vm.tasks.isEmpty
+      body: vm.filteredTasks.isEmpty
           ? const Center(child: Text('No tasks yet'))
           : ListView.builder(
-              itemCount: vm.tasks.length,
+              itemCount: vm.filteredTasks.length,
               itemBuilder: (context, index) {
-                final task = vm.tasks[index];
+                final task = vm.filteredTasks[index];
 
                 return Dismissible(
                   key: Key(task.id),
                   direction: DismissDirection.endToStart,
                   background: Container(
+                    color: Colors.red,
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 20),
-                    color: Colors.red,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
+                    child: const Icon(Icons.delete, color: Colors.white),
                   ),
-                  onDismissed: (_) {
-                    vm.deleteTask(task.id);
-                  },
+                  onDismissed: (_) => vm.deleteTask(task.id),
                   child: ListTile(
-                    onLongPress: () {
-                      final controller = TextEditingController(text: task.title);
-
-                      showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('Edit Task'),
-                          content: TextField(
-                            controller: controller,
-                            autofocus: true,
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancel'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                final newText = controller.text.trim();
-                                if (newText.isNotEmpty) {
-                                  vm.updateTask(task.id, newText);
-                                }
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Save'),
-                            ),
-                          ],
+                    title: GestureDetector(
+                      onTap: () => _showEditDialog(context, task),
+                      child: Text(
+                        task.title,
+                        style: TextStyle(
+                          decoration: task.isDone
+                              ? TextDecoration.lineThrough
+                              : null,
                         ),
-                      );
-                    },
-                    title: Text(
-                      task.title,
-                      style: TextStyle(
-                        decoration:
-                            task.isDone ? TextDecoration.lineThrough : null,
                       ),
                     ),
                     trailing: Checkbox(
@@ -83,41 +72,74 @@ class TaskListView extends StatelessWidget {
             ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              final controller = TextEditingController();
+        onPressed: () => _showAddDialog(context),
+      ),
+    );
+  }
 
-              return AlertDialog(
-                title: const Text('Add Task'),
-                content: TextField(
-                  controller: controller,
-                  autofocus: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter task title',
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      final text = controller.text.trim();
-                      if (text.isNotEmpty) {
-                        context.read<TaskViewModel>().addTask(text);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Add'),
-                  ),
-                ],
-              );
+  /// Add dialog
+  void _showAddDialog(BuildContext context) {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Add Task'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(hintText: 'Task title'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final text = controller.text.trim();
+              if (text.isNotEmpty) {
+                context.read<TaskViewModel>().addTask(text);
+              }
+              Navigator.pop(context);
             },
-          );
-        },
+            child: const Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Edit dialog
+  void _showEditDialog(BuildContext context, task) {
+    final controller = TextEditingController(text: task.title);
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Edit Task'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final text = controller.text.trim();
+              if (text.isNotEmpty) {
+                context
+                    .read<TaskViewModel>()
+                    .updateTask(task.id, text);
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
       ),
     );
   }
