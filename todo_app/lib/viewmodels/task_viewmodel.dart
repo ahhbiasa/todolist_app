@@ -4,7 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../models/task.dart';
 import '../services/local_storage.dart';
 
-/// Filter options
 enum TaskFilter { all, completed, incomplete }
 
 class TaskViewModel extends ChangeNotifier {
@@ -12,39 +11,43 @@ class TaskViewModel extends ChangeNotifier {
   final List<Task> _tasks = [];
 
   TaskFilter _filter = TaskFilter.all;
+  bool _isDarkMode = false;
 
-  /// Get all tasks (raw)
-  List<Task> get tasks => _tasks;
-
-  /// Get filtered tasks
   List<Task> get filteredTasks {
     switch (_filter) {
       case TaskFilter.completed:
         return _tasks.where((t) => t.isDone).toList();
       case TaskFilter.incomplete:
         return _tasks.where((t) => !t.isDone).toList();
-      case TaskFilter.all:
       default:
         return _tasks;
     }
   }
 
-  /// Change filter
+  bool get isDarkMode => _isDarkMode;
+
   void setFilter(TaskFilter filter) {
     _filter = filter;
     notifyListeners();
   }
 
-  /// Load from storage
+  /// Load everything
   Future<void> loadTasks() async {
     final loadedTasks = await _storage.loadTasks();
+    _isDarkMode = await _storage.loadTheme();
     _tasks
       ..clear()
       ..addAll(loadedTasks);
     notifyListeners();
   }
 
-  /// Add task
+  /// Toggle theme
+  Future<void> toggleTheme() async {
+    _isDarkMode = !_isDarkMode;
+    await _storage.saveTheme(_isDarkMode);
+    notifyListeners();
+  }
+
   Future<void> addTask(String title) async {
     final task = Task(
       id: const Uuid().v4(),
@@ -52,13 +55,11 @@ class TaskViewModel extends ChangeNotifier {
       description: '',
       isDone: false,
     );
-
     _tasks.add(task);
     await _storage.saveTasks(_tasks);
     notifyListeners();
   }
 
-  /// Edit task
   Future<void> updateTask(String id, String newTitle) async {
     final index = _tasks.indexWhere((t) => t.id == id);
     if (index != -1) {
@@ -68,7 +69,6 @@ class TaskViewModel extends ChangeNotifier {
     }
   }
 
-  /// Toggle done
   Future<void> toggleTask(String id) async {
     final index = _tasks.indexWhere((t) => t.id == id);
     if (index != -1) {
@@ -78,7 +78,6 @@ class TaskViewModel extends ChangeNotifier {
     }
   }
 
-  /// Delete task
   Future<void> deleteTask(String id) async {
     _tasks.removeWhere((t) => t.id == id);
     await _storage.saveTasks(_tasks);

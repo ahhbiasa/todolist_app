@@ -18,12 +18,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<TaskViewModel>();
+
     return MaterialApp(
-      title: 'To-Do App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'To-Do App',
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: vm.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: const TaskListView(),
     );
   }

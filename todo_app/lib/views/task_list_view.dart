@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../viewmodels/task_viewmodel.dart';
 
 class TaskListView extends StatelessWidget {
@@ -14,6 +13,12 @@ class TaskListView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My To-Do List'),
         actions: [
+          IconButton(
+            icon: Icon(
+              vm.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+            ),
+            onPressed: vm.toggleTheme,
+          ),
           PopupMenuButton<TaskFilter>(
             onSelected: vm.setFilter,
             itemBuilder: (_) => const [
@@ -52,7 +57,7 @@ class TaskListView extends StatelessWidget {
                   onDismissed: (_) => vm.deleteTask(task.id),
                   child: ListTile(
                     title: GestureDetector(
-                      onTap: () => _showEditDialog(context, task),
+                      onTap: () => _editTask(context, task),
                       child: Text(
                         task.title,
                         style: TextStyle(
@@ -71,25 +76,19 @@ class TaskListView extends StatelessWidget {
               },
             ),
       floatingActionButton: FloatingActionButton(
+        onPressed: () => _addTask(context),
         child: const Icon(Icons.add),
-        onPressed: () => _showAddDialog(context),
       ),
     );
   }
 
-  /// Add dialog
-  void _showAddDialog(BuildContext context) {
+  void _addTask(BuildContext context) {
     final controller = TextEditingController();
-
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Add Task'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: const InputDecoration(hintText: 'Task title'),
-        ),
+        content: TextField(controller: controller, autofocus: true),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -110,18 +109,13 @@ class TaskListView extends StatelessWidget {
     );
   }
 
-  /// Edit dialog
-  void _showEditDialog(BuildContext context, task) {
+  void _editTask(BuildContext context, task) {
     final controller = TextEditingController(text: task.title);
-
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Edit Task'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-        ),
+        content: TextField(controller: controller, autofocus: true),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
