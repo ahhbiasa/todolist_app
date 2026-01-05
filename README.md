@@ -156,7 +156,7 @@ Link (Soon)
 ---
 
 ## Installer
-Link (Soon)
+The APK can be downloaded in [this link](todolist_app1.apk)
 
 ---
 
