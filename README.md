@@ -104,14 +104,49 @@ This architecture ensures:
 
 ## Screenshots
 Screenshots of the application interface are provided in the report, including:
-### Main task list screen
-(Soon)
-### Add task dialog
-(Soon)
-### Completed task state
-(Soon)
-### Dark mode appearance
-(Soon)
+### 1. Application Home Screen
+<p align="center">
+  <img src="Screenshots/homepage.jpeg" width="300">
+</p>
+
+
+### 2. Add Task Dialog
+<p align="center">
+  <img src="Screenshots/addempty.jpeg" width="300">
+  <img src="Screenshots/add.jpeg" width="300">
+</p>
+
+### 3. Task Successfully Added
+<p align="center">
+  <img src="Screenshots/addcomplete.jpeg" width="300">
+</p>
+
+### 4. Edit Task
+<p align="center">
+  <img src="Screenshots/edit.jpeg" width="300">
+</p>
+
+### 5. Mark Task as Completed
+<p align="center">
+  <img src="Screenshots/marked.jpeg" width="300">
+</p>
+
+### 6. Delete Task
+<p align="center">
+  <img src="Screenshots/delete.jpeg" width="300">
+</p>
+
+### 7. Filtering Feature
+<p align="center">
+  <img src="Screenshots/filtering.jpeg" width="300">
+  <img src="Screenshots/filtermark.jpeg" width="300">
+  <img src="Screenshots/filterunmark.jpeg" width="300">
+</p>
+
+### 8. Dark Mode (Bonus Feature)
+<p align="center">
+  <img src="Screenshots/darkmode.jpeg" width="300">
+</p>
 
 ---
 
