@@ -151,7 +151,7 @@ Screenshots of the application interface are provided in the report, including:
 ---
 
 ## Demo Video
-Link (Soon)
+The demo video that shows all the application features being tested live can be viewed in the following [YouTube video link](https://youtu.be/pEaDwwYM3VA)
 
 ---
 
