@@ -1,5 +1,10 @@
 # Mobile To-Do List Application (Flutter)
 
+| **Muhammad Abhyasa Santoso** | **5025221066** |
+|------|------------|
+
+---
+
 ## Application Description
 The Mobile To-Do List application is an Android-based mobile application developed to assist users in organizing and managing their daily activities. The application enables users to create, modify, delete, and track the completion status of tasks in a simple and intuitive interface. All task data is stored locally on the device, ensuring persistence even when the application is closed or restarted.
 
