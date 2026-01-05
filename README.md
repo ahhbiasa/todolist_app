@@ -104,14 +104,21 @@ This architecture ensures:
 
 ## Screenshots
 Screenshots of the application interface are provided in the report, including:
-### Main task list screen
-(Soon)
-### Add task dialog
-(Soon)
-### Completed task state
-(Soon)
-### Dark mode appearance
-(Soon)
+### 1. Application Home Screen
+
+### 2. Add Task Dialog
+
+### 3. Task Successfully Added
+
+### 4. Edit Task
+
+### 5. Mark Task as Completed
+
+### 6. Delete Task
+
+### 7. Filtering Feature
+
+### 8. Dark Mode (Bonus Feature)
 
 ---
 
