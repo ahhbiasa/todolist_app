@@ -22,6 +22,20 @@ This project aims to achieve the following learning outcomes:
 - Produce a complete final project deliverable including source code, APK, demo video, and technical report
 
 ---
+## Diagrams
+### Use Case Diagram
+The diagram defines the system's scope, showing how the User interacts with the six core functions. It uses `<<include>>` relationships to mandatory internal processes like Save Data and Load Data.
+<p align="center">
+  <img src="usecase.png" width="500">
+</p>
+
+### Application Flowchart Diagram
+The flowchart illustrates the user's journey and the system's data handling, emphasizing automatic loading on startup and saving on change to ensure data persistence.
+<p align="center">
+  <img src="flowchart.png" width="1000">
+</p>
+
+---
 
 ## Application Features
 
